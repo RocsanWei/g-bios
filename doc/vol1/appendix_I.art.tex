@@ -16,12 +16,17 @@
 	\begin{lstlisting}[language=sh,numbers=none]
 	$ make beagle_defconfig
 	$ make
-	$ make install  // install g-bios image to /maxwit/image/boot
+	$ make install
+	\end{lstlisting}
+	若无错误，最后会出现如下提示：
+	\begin{lstlisting}[language=sh,numbers=none]
+	$ `bh/g-bios-bh.bin' -> `/maxwit/image/boot/g-bios-bh.bin'
+	$ `th/g-bios-th.bin' -> `/maxwit/image/boot/g-bios-th.bin'
 	\end{lstlisting}
 
 	\item 制作 image:
 	\begin{lstlisting}[language=csh,numbers=none]
-	$ cp build/simulators/omap3530/*.py /maxwit/image/boot
+	$ cp build/simulators/omap3530/create_nandflash.py /maxwit/image/boot
 	$ ./create_nandflash.py g-bios-th.bin flash.img
 	\end{lstlisting}
 	在此 image 中只烧录 g-bios 的 th 部分。
@@ -37,16 +42,12 @@
 	put bl1 into flash image done!
 	char device redirected to /dev/pts/5
 	\end{lstlisting}
-	根据上面的启动信息，设置 minicom 的相关配置参数（主要是端口设置）。
+	根据上面的启动信息，得到qemu用的通信串口为``/dev/pts/5'',
+	敲入如下命令
 	\begin{lstlisting}[language=csh,numbers=none]
-	$ cat ~/.minirc.dfl
-	# Machine-generated file - use setup menu in minicom to change parameters.
-	pu port             /dev/pts/5
+	$ minicom -D /dev/pts/5
 	\end{lstlisting}
-	敲入如下命令，待 minicom 启动后敲任意键，即可得到 th 启动界面。
-	\begin{lstlisting}[language=csh,numbers=none]
-	$ sudo minicom
-	\end{lstlisting}
+	待 minicom 启动后敲任意键，即可得到 th 启动界面。
 	接下来进入熟悉的 th 菜单界面，th 部分的 load 方式可以很容易的进行尝试。不清楚之处可以参考第二章烧录部分相关内容。
 
 \end{enumerate}
