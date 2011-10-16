@@ -13,6 +13,14 @@ SECTIONS
 		*(.data)
 	}
 
+	.gbios_font ALIGN(4):
+	{
+		font_init_begin = .;
+		*(.Level0.gbios_font)
+		*(.Level1.gbios_font)
+		font_init_end = .;
+	}
+
 	.gbios_application ALIGN(4):
 	{
 		g_app_begin = .;

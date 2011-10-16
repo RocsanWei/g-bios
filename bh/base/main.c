@@ -1,6 +1,7 @@
 #include <flash/flash.h>
 #include <flash/part.h>
 #include <net/net.h>
+#include <font/font.h>
 
 static const char banner[] = "\n\n" // CLRSCREEN
 	"\t+---------------------------------+\n"
@@ -65,9 +66,48 @@ static void __INIT__ show_sys_info(void)
 	net_check_link_status();
 }
 
+static int __INIT__ font_init(void)
+{
+	int count = 1;
+	font_init_t *init_call = font_init_begin;
+	const char* func_name;
+
+	while (init_call < font_init_end)
+	{
+		int ret;
+
+		printf("%d. [0x%08x]", count, *init_call);
+		func_name = get_func_name(*init_call);
+		if(func_name)
+		{
+			printf(" %s()", func_name);
+		}
+		putchar('\n');
+
+		ret = (*init_call)();
+#ifdef CONFIG_DEBUG
+		if (ret < 0)
+			puts("Failed!");
+		else
+			puts("OK!");
+#endif
+
+		init_call++;
+		count++;
+
+		printf("\n");
+	}
+
+	printf("(g-bios init fonts finished.)\n");
+
+	return 0;
+}
+
 int main(void)
 {
 	sys_init();
+
+	font_init();
 
 	show_sys_info();
 
