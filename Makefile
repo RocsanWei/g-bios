@@ -1,9 +1,5 @@
 -include .config
 
-
-
-
-
 MAJOR_VER = 2
 MINOR_VER = 5
 
